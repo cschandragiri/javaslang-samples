@@ -1,3 +1,3 @@
 # javaslang-samples
 
-Samples examples using cool features of javaslang library
+Sample examples using cool features of javaslang library
