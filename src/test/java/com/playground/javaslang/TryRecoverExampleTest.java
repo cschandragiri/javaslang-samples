@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.base.Stopwatch;
+
 import io.vavr.control.Try;
 
 public class TryRecoverExampleTest
@@ -21,7 +23,7 @@ public class TryRecoverExampleTest
 		// Using optional
 		List<DayOfWeek> result = Stream
 				.of("12/31/2014", "01-01-2015", "12/31/2015", "not a date", "01/01/2016")
-				.map(TryRecoverExample::parseDateOptional)// Parse String to LocalDate
+				.map(DateParser::parseDateOptional)// Parse String to LocalDate
 				.filter(Optional::isPresent) // Filter valid ones
 				.map(Optional::get)// Get wrapped LocalDate
 				.map(DayOfWeek::from) // Map to day of week
@@ -31,15 +33,13 @@ public class TryRecoverExampleTest
 	}
 
 	@Test
-	public void tryLogError()
+	public void tryLogError() throws InterruptedException
 	{
 		List<DayOfWeek> result = Stream
 				.of("12/31/2014", "01-01-2015", "12/31/2015", "not a date", "01/01/2016")
-				.map(TryRecoverExample::parseDateTry)// Parse String to LocalDate
-				.peek(v -> v.onFailure(t -> System.out.println("Failed due to " + t.getMessage())))// Print
-																									// error
-																									// on
-																									// failure
+				.map(DateParser::parseDateTry)// Parse String to LocalDate
+				//on error print message
+				.peek(v -> v.onFailure(t -> System.out.println("Failed due to " + t.getMessage())))
 				.filter(Try::isSuccess)// Filter valids
 				.map(Try::get)// Get wrapped value
 				.map(DayOfWeek::from)// Map to day of week
@@ -53,23 +53,17 @@ public class TryRecoverExampleTest
 	{
 		List<DayOfWeek> result = Stream
 				.of("12/31/2014", "01-01-2015", "12/31/2015", "not a date", "01/01/2016")
-				.map(TryRecoverExample::parseDateAlternate)// Parse String to LocalDate
-				.map(v -> v.recoverWith(e -> TryRecoverExample
+				.map(DateParser::parseDateAlternate)// Parse String to LocalDate
+				//if error map to alternate convention
+				.map(v -> v.recoverWith(e -> DateParser
 						.parseDateTry(((DateTimeParseException) e).getParsedString())))// Try
-				// recovering
-				// with
-				// alternate
-				// //
-				// formatter
-				.peek(v -> v.onFailure(t -> System.out.println("Failed due to " + t.getMessage())))// Print
-																									// error
-																									// on
-																									// failure
+				 //on error print message
+				.peek(v -> v.onFailure(t -> System.out.println("Failed due to " + t.getMessage())))
 				.filter(Try::isSuccess)// Filter valids
 				.map(Try::get)// Get wrapped value
 				.map(DayOfWeek::from)// Map to day of week
 				.collect(Collectors.toList());
 		Assert.assertNotNull(result);
-		System.out.println("tryRecover: " +result);
+		System.out.println("tryRecover: " + result);
 	}
 }

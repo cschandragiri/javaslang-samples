@@ -49,5 +49,14 @@ public class Item implements Comparable<Item>
 		// TODO Auto-generated method stub
 		return Integer.compare(this.getQty(), o.getQty());
 	}
+
+
+	@Override
+	public String toString()
+	{
+		return "Item [name=" + name + ", qty=" + qty + ", price=" + price + "]";
+	}
+	
+	
     
 }

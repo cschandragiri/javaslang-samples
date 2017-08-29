@@ -7,7 +7,12 @@ import java.util.Optional;
 
 import io.vavr.control.Try;
 
-public class TryRecoverExample
+/**
+ * Util class to for using the power of Try.of()
+ * 
+ * @author cchandragiri
+ */
+public class DateParser
 {
 
 	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
