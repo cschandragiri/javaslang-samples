@@ -32,7 +32,6 @@ public class DistinctComparator
 		String distinct = items.filter(e -> e != null && e.getName() != null)
 				.distinctBy(Item::getName)
 				.map(Item::getName)
-				.toJavaStream()
 				.collect(Collectors.joining(", ", "Distinct: ", "."));
 		System.out.println("Distinct By Function: " + distinct);
 		
@@ -41,7 +40,6 @@ public class DistinctComparator
 						.thenComparing(Item::getQty)
 						.thenComparing(Item::getPrice))
 				.map(Item::getName)
-				.toJavaStream()
 				.collect(Collectors.joining(", ", "Distinct: ", "."));
 		System.out.println("Distinct By Comparator: " + distinct);
 	}
