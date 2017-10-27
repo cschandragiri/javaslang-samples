@@ -1,5 +1,6 @@
 package com.playground.javaslang;
 import java.math.BigDecimal;
+import java.util.function.Function;
 
 public class Item implements Comparable<Item>
 {
@@ -57,6 +58,19 @@ public class Item implements Comparable<Item>
 		return "Item [name=" + name + ", qty=" + qty + ", price=" + price + "]";
 	}
 	
-	
+	public interface ItemValidation extends Function<Item, Boolean> {
+		
+		static ItemValidation nameIsNotEmpty() {
+			return item -> item.getName() != null && !item.getName().isEmpty();
+		}
+
+		static ItemValidation eMailContainsAtSign() {
+			return item -> item.getPrice() != null && item.getPrice().compareTo(BigDecimal.ZERO) == 1;
+		}
+
+		default ItemValidation and(ItemValidation other) {
+			return user -> this.apply(user) && other.apply(user);
+		}
+	}
     
 }

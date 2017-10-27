@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.playground.javaslang.Item.ItemValidation;
+
 import io.vavr.collection.List;
 
 public class DistinctComparator {
@@ -54,6 +56,17 @@ public class DistinctComparator {
 				.map(Item::getName)
 				.collect(Collectors.joining(", ", "Distinct: ", "."));
 		System.out.println("Distinct By Comparator: " + distinct);
+	}
+
+	@Test
+	public void test() {
+
+		String distinct = items
+				.filter(e -> e != null && e.getName() != null)
+				.filter(ItemValidation.nameIsNotEmpty().and(ItemValidation.eMailContainsAtSign())::apply)
+				.map(Item::getName)
+				.collect(Collectors.joining(", ", "Distinct: ", "."));
+		System.out.println("Distinct By Function: " + distinct);
 	}
 
 	public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
